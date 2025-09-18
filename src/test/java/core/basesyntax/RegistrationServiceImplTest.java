@@ -76,7 +76,7 @@ class RegistrationServiceImplTest {
         User user = new User("valid_login", "password123", 17);
         Exception exception = assertThrows(RegistrationException.class,
                 () -> registrationService.register(user));
-        assertEquals("User must be at least 18 years old.", exception.getMessage());
+        assertEquals("Age must be at least 18 years old.", exception.getMessage());
     }
 
     @Test
@@ -84,7 +84,7 @@ class RegistrationServiceImplTest {
         User user = new User("valid_login", "password123", null);
         Exception exception = assertThrows(RegistrationException.class,
                 () -> registrationService.register(user));
-        assertEquals("User must be at least 18 years old.", exception.getMessage());
+        assertEquals("Age must be at least 18 years old.", exception.getMessage());
     }
 
     @Test
@@ -111,5 +111,45 @@ class RegistrationServiceImplTest {
         User registeredUser = registrationService.register(user);
         assertNotNull(registeredUser);
         assertEquals(user, registeredUser);
+    }
+
+    @Test
+    void register_emptyLogin_notOk() {
+        User user = new User("", "password123", 25);
+        Exception exception = assertThrows(RegistrationException.class,
+                () -> registrationService.register(user));
+        assertEquals("Login must be at least 6 characters.", exception.getMessage());
+    }
+
+    @Test
+    void register_emptyPassword_notOk() {
+        User user = new User("valid_login", "", 25);
+        Exception exception = assertThrows(RegistrationException.class,
+                () -> registrationService.register(user));
+        assertEquals("Password must be at least 6 characters.", exception.getMessage());
+    }
+
+    @Test
+    void register_passwordLength5_notOk() {
+        User user = new User("valid_login", "abcde", 25);
+        Exception exception = assertThrows(RegistrationException.class,
+                () -> registrationService.register(user));
+        assertEquals("Password must be at least 6 characters.", exception.getMessage());
+    }
+
+    @Test
+    void register_zeroAge_notOk() {
+        User user = new User("valid_login", "password123", 0);
+        Exception exception = assertThrows(RegistrationException.class,
+                () -> registrationService.register(user));
+        assertEquals("Age must be at least 18 years old.", exception.getMessage());
+    }
+
+    @Test
+    void register_negativeAge_notOk() {
+        User user = new User("valid_login", "password123", -5);
+        Exception exception = assertThrows(RegistrationException.class,
+                () -> registrationService.register(user));
+        assertEquals("Age must be at least 18 years old.", exception.getMessage());
     }
 }
