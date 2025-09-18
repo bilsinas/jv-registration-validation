@@ -3,17 +3,14 @@ package core.basesyntax.model;
 import java.util.Objects;
 
 public class User {
-    private Long id;
     private String login;
     private String password;
     private Integer age;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public User(String login, String password, Integer age) {
+        this.login = login;
+        this.password = password;
+        this.age = age;
     }
 
     public String getLogin() {
@@ -57,5 +54,14 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(login, password, age);
+    }
+
+    @Override
+    public String toString() {
+        return "User{"
+                + "login='" + login + '\''
+                + ", password='" + password + '\''
+                + ", age=" + age
+                + '}';
     }
 }
